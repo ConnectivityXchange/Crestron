@@ -1,8 +1,0 @@
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\bin\Debug\ZeeVee-Zyper.dll
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\bin\Debug\ZeeVee-Zyper.pdb
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\bin\Debug\Newtonsoft.Json.Compact.dll
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\bin\Debug\SimplSharpCustomAttributesInterface.dll
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\bin\Debug\SimplSharpHelperInterface.dll
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\obj\Debug\ResolveAssemblyReference.cache
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\obj\Debug\ZeeVee-Zyper.dll
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ZeeVee-Zyper\obj\Debug\ZeeVee-Zyper.pdb

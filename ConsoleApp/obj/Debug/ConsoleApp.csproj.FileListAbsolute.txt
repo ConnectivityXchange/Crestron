@@ -1,7 +1,0 @@
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ConsoleApp\obj\Debug\ResolveAssemblyReference.cache
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ConsoleApp\bin\Debug\ConsoleApp.exe
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ConsoleApp\bin\Debug\ConsoleApp.pdb
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ConsoleApp\bin\Debug\Newtonsoft.Json.Compact.dll
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ConsoleApp\bin\Debug\Newtonsoft.Json.Compact.xml
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ConsoleApp\obj\Debug\ConsoleApp.exe
-C:\source\Crestron\CRESTRON-ZeeVee-Zyper\Driver\ZeeVee-Zyper\ConsoleApp\obj\Debug\ConsoleApp.pdb
