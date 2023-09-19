@@ -1,0 +1,167 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:     Richard Mullins
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+// #ENABLE_DYNAMIC
+#SYMBOL_NAME "Zyper Encoder"
+// #HINT ""
+#DEFINE_CONSTANT DEBUG 1
+// #CATEGORY "" 
+#CATEGORY "23" // Switcher
+// #PRINT_TO_TRACE
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT 
+// #HELP_PDF_FILE ""
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+// #ENCODING_ASCII
+// #ENCODING_UTF16
+// #ENCODING_INHERIT_FROM_PARENT
+// #ENCODING_INHERIT_FROM_PROGRAM
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+#USER_SIMPLSHARP_LIBRARY "ZeeVee-Zyper"  
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT _SKIP_,CEC_On,CEC_Off;
+// ANALOG_INPUT
+STRING_INPUT _SKIP_,SendIR[255],Send232[255],SendCEC[255];
+// BUFFER_INPUT 
+
+DIGITAL_OUTPUT _SKIP_,Enabled;
+DIGITAL_OUTPUT _SKIP_,CableConnected;
+// ANALOG_OUTPUT 
+STRING_OUTPUT _SKIP_,_SKIP_,NameOut$;
+
+ZyperDevice Controller;
+
+/*******************************************************************************************
+  SOCKETS
+  (Uncomment and define socket definitions as needed)
+*******************************************************************************************/
+// TCP_CLIENT
+// TCP_SERVER
+// UDP_SOCKET
+
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+// INTEGER_PARAMETER
+// SIGNED_INTEGER_PARAMETER
+// LONG_INTEGER_PARAMETER
+// SIGNED_LONG_INTEGER_PARAMETER
+STRING_PARAMETER Name$[255];
+
+/*******************************************************************************************
+  Parameter Properties
+  (Uncomment and declare parameter properties as needed)
+*******************************************************************************************/
+#BEGIN_PARAMETER_PROPERTIES Name$
+   propValidUnits = unitString;
+   propDefaultValue = "Decoder Name";
+   propShortDescription = "Decoder Name or MAC address";
+#END_PARAMETER_PROPERTIES
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+/*
+Function MyFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+}
+*/
+
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+PUSH CEC_On
+{
+  Controller.CecOn(Name$);
+}
+
+PUSH CEC_Off
+{
+  Controller.CecOff(Name$);
+}
+
+CHANGE SendIR
+{
+  //Controller.IR(Name$, SendIR);
+}
+
+CHANGE Send232
+{
+  Controller.SendRs232(Name$, Send232);
+}
+
+CHANGE SendCEC
+{
+  Controller.CecHexString(Name$, SendCEC);
+}
+
+EVENTHANDLER OnEnabledFeedback(EnabledEventArgs e) 
+{             
+  if(Name$ <> e.Name) return;
+  if(e.Type <> "encoder")
+  {
+    trace("The name %s matches, but its not a encoder, disabling", Name$);
+    Enabled = 0;
+    return;
+  }
+
+  Enabled = e.State;
+}
+
+EVENTHANDLER OnEncoderStateFeedback(EncoderStateEventArgs e) 
+{
+  if(Name$ <> e.Name) return;
+
+  CableConnected = e.CableConnected;
+}
+    
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+function Main()
+{
+  makestring(NameOut$, "%s", Name$);
+  RegisterEvent(ZyperDevice, EnabledFeedback, OnEnabledFeedback);
+  RegisterEvent(ZyperDevice, EncoderStateFeedback, OnEncoderStateFeedback);
+
+  WaitForInitializationComplete();
+}
+
+

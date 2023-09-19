@@ -1,0 +1,78 @@
+[BEGIN]
+  ObjTp=FSgntr
+  Sgntr=ArchiveManifest
+  RelVrs=4.2500.04
+  IsProgram=1
+  TopLevelProgram=ZeeVee Zyper Example Project.smw
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=ZeeVee Zyper Example Project.smw
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=ZeeVee Zyper Example Project.sig
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=ZeeVee Zyper Example Project.lpz
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=ZeeVee Zyper Example Project.smft
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=ZeeVee Zyper Example Project.lpz.hash
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=Zyper Communication.ush
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=ZeeVee-Zyper.clz
+  Scope=1
+  Module=Zyper Communication.ush
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=Zyper Decoder.ush
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=Zyper Encoder.ush
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=Zyper Multiview.ush
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=Zyper Zone.ush
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=Serial IO Buffer.ush
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=Zyper Videowall.ush
+  Scope=1
+[END]
+[BEGIN]
+  ObjTp=ArchiveItem
+  File=ZeeVee Example Project.sgd_
+  Scope=1
+[END]

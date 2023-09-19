@@ -1,0 +1,137 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:  Richard Mullins
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+// #ENABLE_DYNAMIC
+#SYMBOL_NAME "Zyper Communication"
+// #HINT ""
+// #DEFINE_CONSTANT
+// #CATEGORY "" 
+#CATEGORY "23" // Switcher
+// #PRINT_TO_TRACE
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT 
+// #HELP_PDF_FILE ""
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+// #ENCODING_ASCII
+// #ENCODING_UTF16
+// #ENCODING_INHERIT_FROM_PARENT
+// #ENCODING_INHERIT_FROM_PROGRAM
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+#USER_SIMPLSHARP_LIBRARY "ZeeVee-Zyper"
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT _SKIP_,_SKIP_,_SKIP_,_SKIP_,_SKIP_,enable;
+// ANALOG_INPUT 
+STRING_INPUT Preset[255];
+// BUFFER_INPUT 
+
+// DIGITAL_OUTPUT 
+// ANALOG_OUTPUT 
+// STRING_OUTPUT 
+
+ZyperDevice Controller;
+integer ready;
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+INTEGER_PARAMETER Port,PollTime;
+// SIGNED_INTEGER_PARAMETER
+// LONG_INTEGER_PARAMETER
+// SIGNED_LONG_INTEGER_PARAMETER
+STRING_PARAMETER IP_Address$[16], Username$[255], Password$[255];
+
+/*******************************************************************************************
+  Parameter Properties
+  (Uncomment and declare parameter properties as needed)
+*******************************************************************************************/
+#BEGIN_PARAMETER_PROPERTIES Port
+   propValidUnits = unitDecimal;
+   propDefaultValue = 80d;
+   propShortDescription = "Gateway Port";
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES PollTime
+   propValidUnits = unitTime;
+   propDefaultValue = 30s;
+   propShortDescription = "Poll time in seconds";
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES IP_Address$
+   propValidUnits = unitString;
+   propDefaultValue = "127.0.0.1";
+   propShortDescription = "Gateway IP Address";
+#END_PARAMETER_PROPERTIES
+
+
+#BEGIN_PARAMETER_PROPERTIES Username$, Password$
+   propValidUnits = unitString;
+   propDefaultValue = "";
+#END_PARAMETER_PROPERTIES
+
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+
+PUSH enable
+{
+  if(ready = 1)
+  {
+    trace("Starting module, using: %s:%u",IP_Address$,Port);
+    Controller.Init(IP_Address$, Port, Username$, Password$,PollTime);
+  }
+}
+
+RELEASE enable
+{
+  if(ready) Controller.Disable();
+}
+
+
+CHANGE Preset
+{
+  Controller.RunPreset(Preset);
+}
+
+
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+function Main()
+{
+  ready = 0;
+  wait(100) ready = 1;
+
+  WaitForInitializationComplete();
+}
+
+

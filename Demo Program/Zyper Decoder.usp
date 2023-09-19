@@ -1,0 +1,198 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:     Richard Mullins
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+// #ENABLE_DYNAMIC
+#SYMBOL_NAME "Zyper Decoder"
+// #HINT ""
+#DEFINE_CONSTANT DEBUG 1
+// #CATEGORY "" 
+#CATEGORY "23" // Switcher
+// #PRINT_TO_TRACE
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT 
+// #HELP_PDF_FILE ""
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+// #ENCODING_ASCII
+// #ENCODING_UTF16
+// #ENCODING_INHERIT_FROM_PARENT
+// #ENCODING_INHERIT_FROM_PROGRAM
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+#USER_SIMPLSHARP_LIBRARY "ZeeVee-Zyper"
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT _SKIP_,_SKIP_,Join,CEC_On,CEC_Off;
+ANALOG_INPUT Type;
+STRING_INPUT Encoder$[255],_SKIP_,SendIR[255],Send232[255],SendCEC[255];
+// BUFFER_INPUT 
+
+DIGITAL_OUTPUT _SKIP_,_SKIP_,Enabled;
+DIGITAL_OUTPUT _SKIP_,CableConnected;
+// ANALOG_OUTPUT 
+STRING_OUTPUT _SKIP_,ConnectedName,ConnectedMac;
+
+ZyperDevice Controller;
+
+INTEGER ConnectionType;
+
+
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+INTEGER_PARAMETER DefaultType;
+// SIGNED_INTEGER_PARAMETER
+// LONG_INTEGER_PARAMETER
+// SIGNED_LONG_INTEGER_PARAMETER
+STRING_PARAMETER Name$[255];
+
+/*******************************************************************************************
+  Parameter Properties
+  (Uncomment and declare parameter properties as needed)
+*******************************************************************************************/
+#BEGIN_PARAMETER_PROPERTIES DefaultType
+  propValidUnits = unitDecimal;
+  propDefaultValue = 2d;
+  propList = {1d,"Analog Audio"},{2d,"Fast Switched"},{3d,"Genlocked"},{4d,"Genlocked Scaled"},{5d,"HDMI Audio"},{6d,"Video"},{7d,"USB"};
+  propShortDescription = "Default Switching Type";
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES Name$
+   propValidUnits = unitString;
+   propDefaultValue = "Decoder Name";
+   propShortDescription = "Decoder Name or MAC address";
+#END_PARAMETER_PROPERTIES
+
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+string_function GetConnectionType()
+{
+  switch(ConnectionType) 
+  {   
+    case(0):
+      return("none");
+    case (1):
+      return("analogAudio");
+    case (2):
+      return("fastSwitched");
+    case (3):
+      return("genlocked");
+    case (4):
+      return("genlockedScaled");
+    case (5):
+      return("hdmiAudio");
+    case (6):
+      return("video");
+    case (7):
+      return("usb"); 
+    default:
+      return("fastSwitched");
+  }
+}
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+PUSH Join
+{
+  string type[32];
+
+  if(DEBUG) trace("Connecting %s to %s",Encoder$,Name$);
+  type = GetConnectionType();
+  Controller.Join(Encoder$, Name$, type);
+}
+
+PUSH CEC_On
+{
+  Controller.CecOn(Name$);
+}
+
+PUSH CEC_Off
+{
+  Controller.CecOff(Name$);
+}
+
+CHANGE Type
+{
+  ConnectionType = Type;
+}
+
+CHANGE SendIR
+{
+  Controller.SendIr(Name$, SendIR);
+}
+
+CHANGE Send232
+{
+  Controller.SendRs232(Name$, Send232);
+}
+
+CHANGE SendCEC
+{
+  Controller.CecHexString(Name$, SendCEC);
+}
+  
+EVENTHANDLER OnEnabledFeedback(EnabledEventArgs e) 
+{             
+  if(Name$ <> e.Name) return;
+  if(e.Type <> "decoder") 
+  {
+    trace("The name %s matches, but its not a decoder, disabling", Name$);
+    Enabled = 0;
+    return;
+  }
+
+  Enabled = e.State;
+}
+
+EVENTHANDLER OnDecoderStateFeedback(DecoderStateEventArgs e) 
+{
+  if(Name$ <> e.Name) return;
+
+  CableConnected = e.CableConnected;  
+  ConnectedName = e.ConnectedName;
+  ConnectedMac = e.ConnectedMac;
+}
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+function Main()
+{
+  WaitForInitializationComplete();
+  ConnectionType = DefaultType;
+
+  RegisterEvent(ZyperDevice, EnabledFeedback, OnEnabledFeedback);
+  RegisterEvent(ZyperDevice, DecoderStateFeedback, OnDecoderStateFeedback);
+
+}
